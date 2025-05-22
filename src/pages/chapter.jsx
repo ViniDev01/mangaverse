@@ -23,7 +23,7 @@ import {
   ThumbsDown,
 } from "lucide-react";
 import { useUser } from "../context/UserContext";
-import LikeButton from "../components/page-manga/LikeButton";
+import LikeButton from "../components/page-chapter/LikeButton";
 import Title from "../components/page-chapter/title";
 import ChapterSelector from "../components/page-chapter/ChapterSelector";
 import ModoLeitura from "../components/page-chapter/ModoLeitura";
@@ -31,6 +31,10 @@ import PageSelector from "../components/page-chapter/PageSelector";
 import PageNavigation from "../components/page-chapter/PageNavigation";
 import ChapterNavigation from "../components/page-chapter/ChapterNavigation";
 import ChapterPageViewer from "../components/page-chapter/ChapterPageViewer";
+import CommentToggleButton from "../components/page-chapter/CommentToggleButton";
+import ReaderNavigation from "../components/page-chapter/ReaderNavigation";
+import ChapterSelectorTwo from "../components/page-chapter/ChapterSelectorTwo"; 
+import CommentsPanel from "../components/page-chapter/CommentsPanel";                     
 
 function ChapterPage() {
   const navigate = useNavigate(); // Importa o hook useNavigate para navegação
@@ -306,20 +310,15 @@ function ChapterPage() {
 
         </div>
 
-        <div className="topo">
-          <ChevronUp color="#ffffff" />
-        </div>
+        
       </div>
 
       <div className="chapter-right">
         <div className="container-comments">
-          <div
-            className={`buttons-comments ${showComments ? "show" : ""}`}
-            onClick={() => setShowComments(!showComments)}
-          >
-            <ChevronsLeft />
-            <MessageCircleMore />
-          </div>
+          <CommentToggleButton 
+            setShowComments={setShowComments}
+            showComments={showComments}
+          />
           <div className={`comments-desktop`}>
             <div className="sobre">
               <img src={manga.image} />
@@ -328,79 +327,19 @@ function ChapterPage() {
             </div>
 
             <div className="chv-1">
-              <div className="chapter-comments">
-                {modo === "horizontal" && (
-                  <>
-                    <button
-                      onClick={handlePrevPage}
-                      disabled={currentPageIndex === 0}
-                    >
-                      <ChevronLeft />
-                    </button>
-
-                    <select
-                      value={currentPageIndex}
-                      onChange={(e) =>
-                        setCurrentPageIndex(Number(e.target.value))
-                      }
-                    >
-                      {chapter.pages.map((_, index) => (
-                        <option key={index} value={index}>
-                          {index + 1} / {chapter.pages.length}{" "}
-                        </option>
-                      ))}
-                    </select>
-
-                    <button
-                      onClick={handleNextPage}
-                      disabled={currentPageIndex === chapter.pages.length - 1}
-                    >
-                      <ChevronRight />
-                    </button>
-                  </>
-                )}
-
-                {modo === "vertical" && (
-                  <>
-                    <button
-                      onClick={handlePrevChapter}
-                      disabled={
-                        allChapters.findIndex(
-                          (ch) => ch.id === currentChapterId
-                        ) ===
-                        allChapters.length - 1
-                      }
-                    >
-                      <ChevronLeft />
-                    </button>
-
-                    <select
-                      value={currentChapterId}
-                      onChange={(e) =>
-                        navigate(`/manga/${mangaId}/${e.target.value}`)
-                      }
-                    >
-                      {allChapters.map((chap) => (
-                        <option key={chap.id} value={chap.id}>
-                          Capítulo {chap.number}{" "}
-                          {chap.title ? `- ${chap.title}` : ""}
-                        </option>
-                      ))}
-                    </select>
-
-                    <button
-                      onClick={handleNextChapter}
-                      disabled={
-                        allChapters.findIndex(
-                          (ch) => ch.id === currentChapterId
-                        ) === 0
-                      }
-                    >
-                      <ChevronRight />
-                    </button>
-                  </>
-                )}
-              </div>
+              <ReaderNavigation 
+                modo={modo}
+                setModo={setModo}
+                currentPageIndex={currentPageIndex}
+                setCurrentPageIndex={setCurrentPageIndex}
+                chapter={chapter}
+                allChapters={allChapters}
+                currentChapterId={currentChapterId}
+                handlePrevPage={handlePrevPage}
+                handleNextPage={handleNextPage}
+                handlePrevChapter={handlePrevChapter}
+                handleNextChapter={handleNextChapter}
+              />
               <div className="redimencao-comments">
                 <select value={modo} onChange={(e) => setModo(e.target.value)}>
                   <option value="horizontal">Horizontal</option>
@@ -411,108 +350,32 @@ function ChapterPage() {
 
             <div className="chv-2">
               {modo === "horizontal" && (
-                <div className="chapter-comments">
-                  <button
-                    onClick={handlePrevChapter}
-                    disabled={
-                      allChapters.findIndex(
-                        (ch) => ch.id === currentChapterId
-                      ) ===
-                      allChapters.length - 1
-                    }
-                  >
-                    <ChevronLeft />
-                  </button>
-
-                  <select
-                    value={currentChapterId}
-                    onChange={(e) =>
-                      navigate(`/manga/${mangaId}/${e.target.value}`)
-                    }
-                  >
-                    {allChapters.map((chap) => (
-                      <option key={chap.id} value={chap.id}>
-                        Capítulo {chap.number}{" "}
-                        {chap.title ? `- ${chap.title}` : ""}
-                      </option>
-                    ))}
-                  </select>
-
-                  <button
-                    onClick={handleNextChapter}
-                    disabled={
-                      allChapters.findIndex(
-                        (ch) => ch.id === currentChapterId
-                      ) === 0
-                    }
-                  >
-                    <ChevronRight />
-                  </button>
-                </div>
+                <ChapterSelectorTwo 
+                  currentChapterId={currentChapterId}
+                  allChapters={allChapters}
+                  navigate={navigate}
+                  mangaId={mangaId}
+                  handlePrevChapter={handlePrevChapter}
+                  handleNextChapter={handleNextChapter}
+                />
               )}
             </div>
 
-            <div className="comments">
-              {user ? (
-                <div className="comment-interaction">
-                  <div className="reactions">
-                    <LikeButton
-                      chapterId={chapter.id}
-                      mangaId={manga.id}
-                      userId={user?.uid}
-                    />
-
-                    <div className="comment-count">
-                      <span>0</span>
-                      <span>comentários</span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="comment-login-warning">
-                  <p>Faça login para curtir ou comentar neste capítulo.</p>
-                </div>
-              )}
-
-              <div className="comment-box">
-                <textarea placeholder="Escreva um comentário..." rows={4} />
-
-                <button className="btn-comment">
-                  <SendHorizontal />
-                </button>
-              </div>
-
-              <div className="comment-list">
-                <div className="container-comment-item">
-                  <div className="comment-item">
-                    <img src={manga.image} alt="Avatar" />
-                    <div className="comment-content">
-                      <h3>{user?.displayName || "Usuario anonimo"}</h3>
-                      <p>Conteúdo do comentário</p>
-                    </div>
-                  </div>
-                  <div className="comment-actions">
-                    <div className="btns-like">
-                      <button>
-                        <ThumbsUp />
-                      </button>
-                      <span>0</span>
-                      <button>
-                        <ThumbsDown />
-                      </button>
-                      <span>0</span>
-                    </div>
-                    <div className="btn-responder">
-                      <span>Responder</span>
-                    </div>
-                  </div>
-                </div>
-                {/* Adicione mais comentários aqui */}
-              </div>
-            </div>
+            <CommentsPanel 
+              user={user}
+              manga={manga}
+              chapter={chapter}
+              mangaId={mangaId}
+              chapterId={currentChapterId}
+            />
           </div>
           <div className="comments-mobile"></div>
         </div>
+      </div>
+
+
+      <div className="topo">
+        <ChevronUp color="#ffffff" />
       </div>
     </div>
   );
