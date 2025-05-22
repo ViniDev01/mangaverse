@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase/firebase.js"; // Importe a configuração do Firebase
+import { db } from "../firebase/firebaseConfig.js"; // Importe a configuração do Firebase
 import { doc, getDoc, collection, getDocs } from "firebase/firestore"; // Importe doc e getDoc
 import { useParams } from "react-router-dom"; // Importe useParams
 import Header from "../components/page-home/header.jsx";

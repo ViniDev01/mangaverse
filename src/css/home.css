@@ -1379,6 +1379,7 @@ body.modal-open {
     cursor: pointer;
     border: 1px solid #11294d;
     transition: border 0.3s ease, color 0.3s ease;
+    user-select: none;
 }
 
 .reaction-item.ativo {
@@ -1386,6 +1387,8 @@ body.modal-open {
 }
 
 .comment-count {
+    display: flex;
+    gap: 5px;
     font-size: 13px;
     color: #ddd;
     user-select: none;

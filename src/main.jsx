@@ -6,7 +6,7 @@ import Home from "./home.jsx";
 import Manga from "./pages/manga.jsx";
 import Chapter from "./pages/chapter.jsx";
 import Configuracoes from "./pages/config.jsx";
-import { UserProvider } from "./context/UserContext";
+import UserProvider from "./context/UserProvider";
 import { ConfigProvider } from "./context/ConfigContext"; // Importa o ConfigProvider
 import { ThemaProvider } from "./context/ThemaContext"; // Importa o ThemaProvider
 

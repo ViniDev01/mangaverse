@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebaseConfig";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Toast from "./Toast";
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../context/useUser";
 
 function LoginModal({ onClose, toggleForms }) {
   const [showPassword, setShowPassword] = useState(false);

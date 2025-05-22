@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { db } from "../../firebase/firebase";
+import { db } from "../../firebase/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../context/useUser";
 import Perfil from "../Perfil";
 import { signOut } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebaseConfig";
 
 function Header({ openLogin, showComments }) {
   const [visivel, setVisivel] = useState(false);

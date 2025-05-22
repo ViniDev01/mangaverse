@@ -1,6 +1,6 @@
 // LikeButton.jsx
 import { useEffect, useState } from "react";
-import { db } from "../../firebase/firebase"; // seu arquivo de config do Firebase
+import { db } from "../../firebase/firebaseConfig"; // seu arquivo de config do Firebase
 import {
   doc,
   getDoc,
@@ -11,6 +11,7 @@ import {
 import { ThumbsUp } from "lucide-react";
 
 export default function LikeButton({ mangaId, chapterId, userId }) {
+  const [isProcessing, setIsProcessing] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
@@ -41,7 +42,8 @@ export default function LikeButton({ mangaId, chapterId, userId }) {
   }, [mangaId, chapterId, userId]);
 
   const handleLikeToggle = async () => {
-    if (!userId) return;
+    if (!userId || isProcessing) return;
+    setIsProcessing(true);
 
     const chapterRef = doc(
       db,
@@ -68,13 +70,16 @@ export default function LikeButton({ mangaId, chapterId, userId }) {
       setIsLiked(!isLiked);
     } catch (error) {
       console.error("Erro ao atualizar like:", error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
     <div
-      className={`reaction-item ${isLiked ? "ativo" : ""}`}
+      className={`reaction-item ${isLiked ? "ativo" : ""} ${isProcessing ? "disable" : ""}`}
       onClick={handleLikeToggle}
+      style={{ pointerEvents: isProcessing ? "none" : "auto", opacity: isProcessing ? 0.5 : 1 }}
     >
       <ThumbsUp />
       <span>{likeCount}</span>

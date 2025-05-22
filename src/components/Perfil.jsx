@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser";
 import imgPerfil from "../assets/img/default_profile.png";
 
 function Perfil({ handleLogout }) {

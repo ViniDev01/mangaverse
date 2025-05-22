@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebaseConfig";
 import { doc, getFirestore, getDoc, writeBatch } from "firebase/firestore";
 
 function RegisterModal({ onClose, toggleForms }) {

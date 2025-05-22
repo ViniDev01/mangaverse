@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { db } from "../firebase/firebase";
+import { db } from "../firebase/firebaseConfig";
 import {
   doc,
   getDoc,
@@ -22,7 +22,7 @@ import {
   ThumbsUp,
   ThumbsDown,
 } from "lucide-react";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser";
 import LikeButton from "../components/page-chapter/LikeButton";
 import Title from "../components/page-chapter/title";
 import ChapterSelector from "../components/page-chapter/ChapterSelector";
@@ -33,8 +33,8 @@ import ChapterNavigation from "../components/page-chapter/ChapterNavigation";
 import ChapterPageViewer from "../components/page-chapter/ChapterPageViewer";
 import CommentToggleButton from "../components/page-chapter/CommentToggleButton";
 import ReaderNavigation from "../components/page-chapter/ReaderNavigation";
-import ChapterSelectorTwo from "../components/page-chapter/ChapterSelectorTwo"; 
-import CommentsPanel from "../components/page-chapter/CommentsPanel";                     
+import ChapterSelectorTwo from "../components/page-chapter/ChapterSelectorTwo";
+import CommentsPanel from "../components/page-chapter/CommentsPanel";
 
 function ChapterPage() {
   const navigate = useNavigate(); // Importa o hook useNavigate para navegação
@@ -235,11 +235,6 @@ function ChapterPage() {
     }
   };
 
-  console.log("Dados do usuário:", {
-    user,
-    displayName: user?.displayName,
-    isLoggedIn: !!user,
-  });
 
   if (loading) return <div className="loading">Carregando...</div>; // Exibe mensagem de carregamento enquanto os dados estão sendo buscados
   if (!manga) return <div>Mangá não encontrado</div>; // Exibe mensagem se o mangá não for encontrado
@@ -250,14 +245,16 @@ function ChapterPage() {
       <div className="chapter-left">
         <Header showComments={showComments} />
         <div className="chapter-content">
-          <Title 
+          <Title
             mangaId={manga.id}
             mangaTitle={manga.title}
             chapterNumber={chapter.number}
             showComments={showComments}
           />
 
-          <div className={`container-filter-chapter ${showComments ? "show" : ""}`} >
+          <div
+            className={`container-filter-chapter ${showComments ? "show" : ""}`}
+          >
             <div className="box-filter">
               <ChapterSelector
                 mangaId={mangaId}
@@ -265,10 +262,7 @@ function ChapterPage() {
                 allChapters={allChapters}
               />
 
-              <ModoLeitura
-                modo={modo}
-                setModo={setModo}
-              />
+              <ModoLeitura modo={modo} setModo={setModo} />
             </div>
 
             <div className="box-reader-navigation">
@@ -297,7 +291,6 @@ function ChapterPage() {
               )}
             </div>
           </div>
-          
 
           <ChapterPageViewer
             chapter={chapter}
@@ -306,16 +299,12 @@ function ChapterPage() {
             fontSizeClass={fontSizeClass}
             renderPages={renderPages}
           />
-
-
         </div>
-
-        
       </div>
 
       <div className="chapter-right">
         <div className="container-comments">
-          <CommentToggleButton 
+          <CommentToggleButton
             setShowComments={setShowComments}
             showComments={showComments}
           />
@@ -327,7 +316,7 @@ function ChapterPage() {
             </div>
 
             <div className="chv-1">
-              <ReaderNavigation 
+              <ReaderNavigation
                 modo={modo}
                 setModo={setModo}
                 currentPageIndex={currentPageIndex}
@@ -350,7 +339,7 @@ function ChapterPage() {
 
             <div className="chv-2">
               {modo === "horizontal" && (
-                <ChapterSelectorTwo 
+                <ChapterSelectorTwo
                   currentChapterId={currentChapterId}
                   allChapters={allChapters}
                   navigate={navigate}
@@ -361,7 +350,7 @@ function ChapterPage() {
               )}
             </div>
 
-            <CommentsPanel 
+            <CommentsPanel
               user={user}
               manga={manga}
               chapter={chapter}
@@ -372,7 +361,6 @@ function ChapterPage() {
           <div className="comments-mobile"></div>
         </div>
       </div>
-
 
       <div className="topo">
         <ChevronUp color="#ffffff" />

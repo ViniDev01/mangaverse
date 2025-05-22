@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db } from "./firebase/firebase.js";
+import { db } from "./firebase/firebaseConfig.js";
 import { collection, getDocs } from "firebase/firestore";
 import Header from "./components/page-home/header.jsx";
 import Banner from "./components/page-home/banner.jsx";

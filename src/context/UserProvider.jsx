@@ -1,23 +1,21 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth } from "../firebase/firebaseConfig";
+import { UserContext } from "./UserContext";
 
-const UserContext = createContext();
-
-export function UserProvider({ children }) {
+const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Força a atualização do usuário
         await firebaseUser.reload();
-        console.log("Usuário no contexto:", firebaseUser.displayName); // Verifique
         setUser(firebaseUser);
       } else {
         setUser(null);
       }
     });
+
     return unsubscribe;
   }, []);
 
@@ -26,5 +24,6 @@ export function UserProvider({ children }) {
       {children}
     </UserContext.Provider>
   );
-}
-export const useUser = () => useContext(UserContext);
+};
+
+export default UserProvider;

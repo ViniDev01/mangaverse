@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { db } from "../firebase/firebaseConfig";
 
 export const useMostViewedMangas = () => {
   const [mostViewed, setMostViewed] = useState([]);
